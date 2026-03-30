@@ -1,0 +1,11 @@
+@tailwind base within {
+  @ apply base;
+}
+
+@tailwind components {
+  @ apply components;
+}
+
+@tailwind utilities  {
+  @ apply utilities;
+}

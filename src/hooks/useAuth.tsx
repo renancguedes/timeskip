@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Profile } from 'A/types/database';
+import { Profile } from '@/types/database';
 import { User } from '@supabase/supabase-js';
 
 interface AuthContextType {
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider value={{ user, profile, loading, signOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
-  8ý
+  );
 }
 
 export const useAuth = () => useContext(AuthContext);

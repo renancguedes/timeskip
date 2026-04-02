@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { createClient } from 'A/lib/supabase/client';
-import { Objective, ObjectiveStep, Pillar, Theme, PillarSubtype } from 'A/types/database';
+import { createClient } from '@/lib/supabase/client';
+import { Objective, ObjectiveStep, Pillar, Theme, PillarSubtype } from '@/types/database';
 
 export function useObjectives(groupId?: string) {
   const [objectives, setObjectives] = useState<Objective[]>([]);

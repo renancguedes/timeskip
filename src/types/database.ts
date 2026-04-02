@@ -67,7 +67,8 @@ export interface Group {
 }
 
 export interface GroupMember {
-  id: string;Š  group_id: string;
+  id: string;
+  group_id: string;
   user_id: string;
   role: 'owner' | 'editor' | 'viewer';
   joined_at: Date;

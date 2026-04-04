@@ -34,26 +34,26 @@ export default function GroupsPage() {
   if (groups.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Groups</h1>
+        <h1 className="text-3xl font-bold">Grupos</h1>
         <EmptyState
-          title="No groups yet"
-          description="Create a new group or join an existing one to collaborate with others."
+          title="Nenhum grupo ainda"
+          description="Crie um novo grupo ou entre em um existente para colaborar com outros."
           icon={Users}
-          actionButton={{ label: 'Create Group', onClick: () => setShowCreateModal(true) }}
+          actionButton={{ label: 'Criar Grupo', onClick: () => setShowCreateModal(true) }}
         />
-        <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create Group">
+        <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Criar Grupo">
           <form onSubmit={handleCreateGroup} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
               <input type="text" value={newGroupName} onChange={(e) => setNewGroupName(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
               <textarea value={newGroupDesc} onChange={(e) => setNewGroupDesc(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2" rows={3} />
             </div>
             <div className="flex justify-end gap-3">
-              <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)}>Cancel</Button>
-              <Button type="submit">Create</Button>
+              <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)}>Cancelar</Button>
+              <Button type="submit">Criar</Button>
             </div>
           </form>
         </Modal>
@@ -64,12 +64,12 @@ export default function GroupsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Groups</h1>
+        <h1 className="text-3xl font-bold">Grupos</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setShowJoinModal(true)}>Join Group</Button>
+          <Button variant="outline" onClick={() => setShowJoinModal(true)}>Entrar em Grupo</Button>
           <Button onClick={() => setShowCreateModal(true)}>
             <Plus size={16} className="mr-2" />
-            New Group
+            Novo Grupo
           </Button>
         </div>
       </div>
@@ -79,32 +79,32 @@ export default function GroupsPage() {
         ))}
       </div>
 
-      <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create Group">
+      <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Criar Grupo">
         <form onSubmit={handleCreateGroup} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
             <input type="text" value={newGroupName} onChange={(e) => setNewGroupName(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2" required />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
             <textarea value={newGroupDesc} onChange={(e) => setNewGroupDesc(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2" rows={3} />
           </div>
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)}>Cancel</Button>
-            <Button type="submit">Create</Button>
+            <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)}>Cancelar</Button>
+            <Button type="submit">Criar</Button>
           </div>
         </form>
       </Modal>
 
-      <Modal isOpen={showJoinModal} onClose={() => setShowJoinModal(false)} title="Join Group">
+      <Modal isOpen={showJoinModal} onClose={() => setShowJoinModal(false)} title="Entrar em Grupo">
         <form onSubmit={handleJoinGroup} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Invite Code</label>
-            <input type="text" value={joinCode} onChange={(e) => setJoinCode(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter invite code" required />
+            <label className="block text-sm font-medium text-gray-700 mb-1">Código de Convite</label>
+            <input type="text" value={joinCode} onChange={(e) => setJoinCode(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Digite o código de convite" required />
           </div>
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => setShowJoinModal(false)}>Cancel</Button>
-            <Button type="submit">Join</Button>
+            <Button type="button" variant="outline" onClick={() => setShowJoinModal(false)}>Cancelar</Button>
+            <Button type="submit">Entrar</Button>
           </div>
         </form>
       </Modal>

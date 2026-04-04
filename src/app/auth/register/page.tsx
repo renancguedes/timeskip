@@ -41,53 +41,53 @@ export default function RegisterPage() {
   return (
     <main className="flex items-center justify-center h-screen bg-gray-50">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-2">timeskip</h1>
-        <p className="text-gray-500 text-center mb-6">Create your account</p>
+        <h1 className="text-2xl font-bold text-center mb-2">TimeSkip</h1>
+        <p className="text-gray-500 text-center mb-6">Crie sua conta</p>
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4">{error}</div>
         )}
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder="Your name"
+              placeholder="Seu nome"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder="you@example.com"
+              placeholder="voce@exemplo.com"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder="At least 6 characters"
+              placeholder="No mínimo 6 caracteres"
               required
               minLength={6}
             />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Creating account...' : 'Create account'}
+            {loading ? 'Criando conta...' : 'Criar conta'}
           </Button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
-          Already have an account?{' '}
-          <Link href="/auth/login" className="text-purple-600 hover:underline">Sign in</Link>
+          Já tem uma conta?{' '}
+          <Link href="/auth/login" className="text-purple-600 hover:underline">Entrar</Link>
         </p>
       </div>
     </main>

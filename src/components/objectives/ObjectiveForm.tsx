@@ -23,29 +23,29 @@ export default function ObjectiveForm({ initialData, onSubmit, onCancel }: Objec
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Título</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-          placeholder="What do you want to achieve?"
+          placeholder="O que você quer alcançar?"
           required
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
           rows={3}
-          placeholder="Describe your objective..."
+          placeholder="Descreva seu objetivo..."
         />
       </div>
       <div className="flex justify-end gap-3 pt-2">
-        <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-        <Button type="submit">{initialData ? 'Update' : 'Create'}</Button>
+        <Button type="button" variant="outline" onClick={onCancel}>Cancelar</Button>
+        <Button type="submit">{initialData ? 'Atualizar' : 'Criar'}</Button>
       </div>
     </form>
   );

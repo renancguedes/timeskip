@@ -56,7 +56,7 @@ export default function ObjectiveCard({ objective, onToggleStep, onEdit, onDelet
       {totalSteps > 0 && (
         <div className="mt-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-gray-500">{completedSteps}/{totalSteps} steps</span>
+            <span className="text-xs text-gray-500">{completedSteps}/{totalSteps} etapas</span>
             <button onClick={() => setExpanded(!expanded)} className="text-gray-400 hover:text-gray-600">
               {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>

@@ -22,7 +22,7 @@ function AppLayoutInner({ children }: { children: ReactNode }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500">Carregando...</div>
       </div>
     );
   }
@@ -30,15 +30,15 @@ function AppLayoutInner({ children }: { children: ReactNode }) {
   if (!user) return null;
 
   const navItems = [
-    { href: '/objectives', label: 'Objectives', icon: Target },
-    { href: '/groups', label: 'Groups', icon: Users },
+    { href: '/objectives', label: 'Objetivos', icon: Target },
+    { href: '/groups', label: 'Grupos', icon: Users },
   ];
 
   return (
     <div className="flex h-screen bg-gray-50">
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-6 border-b">
-          <h1 className="text-xl font-bold text-purple-600">timeskip</h1>
+          <h1 className="text-xl font-bold text-purple-600">TimeSkip</h1>
         </div>
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => {
@@ -62,7 +62,7 @@ function AppLayoutInner({ children }: { children: ReactNode }) {
         <div className="p-4 border-t">
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-600 truncate">{profile?.name || user.email}</span>
-            <button onClick={signOut} className="text-gray-400 hover:text-gray-600" title="Sign out">
+            <button onClick={signOut} className="text-gray-400 hover:text-gray-600" title="Sair">
               <LogOut size={18} />
             </button>
           </div>

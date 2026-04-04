@@ -3,8 +3,8 @@ import { Fira_Sans } from 'next/font/google';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'timeskip',
-  description: 'Objectives and goals tracker with timeskip',
+  title: 'TimeSkip',
+  description: 'Acompanhe seus objetivos e metas com o TimeSkip',
 };
 
 const fonts = Fira_Sans({
@@ -15,7 +15,7 @@ const fonts = Fira_Sans({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={fonts.variable}>
+    <html lang="pt-BR" className={fonts.variable}>
       <body>
         {children}
       </body>

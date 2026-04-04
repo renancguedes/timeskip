@@ -33,41 +33,41 @@ export default function LoginPage() {
   return (
     <main className="flex items-center justify-center h-screen bg-gray-50">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-2">timeskip</h1>
-        <p className="text-gray-500 text-center mb-6">Sign in to your account</p>
+        <h1 className="text-2xl font-bold text-center mb-2">TimeSkip</h1>
+        <p className="text-gray-500 text-center mb-6">Entre na sua conta</p>
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4">{error}</div>
         )}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder="you@example.com"
+              placeholder="voce@exemplo.com"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder="Your password"
+              placeholder="Sua senha"
               required
             />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'Entrando...' : 'Entrar'}
           </Button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
-          Don&apos;t have an account?{' '}
-          <Link href="/auth/register" className="text-purple-600 hover:underline">Register</Link>
+          Ainda não tem uma conta?{' '}
+          <Link href="/auth/register" className="text-purple-600 hover:underline">Cadastre-se</Link>
         </p>
       </div>
     </main>

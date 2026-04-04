@@ -21,7 +21,7 @@ export default function ShareCard({ group }: ShareCardProps) {
         <div className="flex items-center gap-4 text-sm text-gray-500">
           <span className="flex items-center gap-1">
             <Users size={14} />
-            {memberCount} member{memberCount !== 1 ? 's' : ''}
+            {memberCount} {memberCount === 1 ? 'membro' : 'membros'}
           </span>
           {group.owner && (
             <span className="flex items-center gap-1">
@@ -32,7 +32,7 @@ export default function ShareCard({ group }: ShareCardProps) {
           {group.deadline && (
             <span className="flex items-center gap-1">
               <Calendar size={14} />
-              {new Date(group.deadline).toLocaleDateString()}
+              {new Date(group.deadline).toLocaleDateString('pt-BR')}
             </span>
           )}
         </div>

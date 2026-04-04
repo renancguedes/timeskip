@@ -8,6 +8,12 @@ import { Modal } from '@/components/ui/Modal';
 import ObjectiveForm from '@/components/objectives/ObjectiveForm';
 import { Plus, Target } from 'lucide-react';
 
+const statusLabels: Record<string, string> = {
+  active: 'Ativos',
+  completed: 'Concluídos',
+  archived: 'Arquivados',
+};
+
 export default function ObjectivesPage() {
   const { objectives, loading, createObjective, updateObjective, deleteObjective, toggleStep } = useObjectives();
   const [showModal, setShowModal] = useState(false);
@@ -29,13 +35,13 @@ export default function ObjectivesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Objectives</h1>
+        <h1 className="text-3xl font-bold">Objetivos</h1>
         <button
           className="inline-flex items-center bg-purple-600 text-white rounded-lg px-4 py-2 hover:bg-purple-700 transition-colors"
           onClick={() => setShowModal(true)}
         >
           <Plus size={16} className="mr-2" />
-          New Objective
+          Novo Objetivo
         </button>
       </div>
 
@@ -50,19 +56,19 @@ export default function ObjectivesPage() {
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
-            {status.charAt(0).toUpperCase() + status.slice(1)}
+            {statusLabels[status]}
           </button>
         ))}
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-gray-500">Loading objectives...</div>
+        <div className="text-center py-12 text-gray-500">Carregando objetivos...</div>
       ) : filteredObjectives.length === 0 ? (
         <EmptyState
-          title="No objectives yet"
-          description={`You don't have any ${filter} objectives. Create one to get started!`}
+          title="Nenhum objetivo ainda"
+          description={`Você não tem nenhum objetivo ${statusLabels[filter].toLowerCase()}. Crie um para começar!`}
           icon={Target}
-          actionButton={{ label: 'Create Objective', onClick: () => setShowModal(true) }}
+          actionButton={{ label: 'Criar Objetivo', onClick: () => setShowModal(true) }}
         />
       ) : (
         <div className="grid gap-4">
@@ -81,7 +87,7 @@ export default function ObjectivesPage() {
         </div>
       )}
 
-      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setEditingId(null); }} title={editingId ? 'Edit Objective' : 'New Objective'}>
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setEditingId(null); }} title={editingId ? 'Editar Objetivo' : 'Novo Objetivo'}>
         <ObjectiveForm
           initialData={editingId ? objectives.find(o => o.id === editingId) : undefined}
           onSubmit={handleCreate}

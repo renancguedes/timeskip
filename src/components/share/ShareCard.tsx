@@ -26,13 +26,13 @@ export default function ShareCard({ group }: ShareCardProps) {
           {group.owner && (
             <span className="flex items-center gap-1">
               <Crown size={14} />
-              {group.owner.name}
+              {group.owner.username}
             </span>
           )}
-          {group.deadline && (
+          {group.end_date && (
             <span className="flex items-center gap-1">
               <Calendar size={14} />
-              {new Date(group.deadline).toLocaleDateString('pt-BR')}
+              {new Date(group.end_date).toLocaleDateString('pt-BR')}
             </span>
           )}
         </div>

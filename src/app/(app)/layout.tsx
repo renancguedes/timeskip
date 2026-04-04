@@ -61,7 +61,7 @@ function AppLayoutInner({ children }: { children: ReactNode }) {
         </nav>
         <div className="p-4 border-t">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-600 truncate">{profile?.name || user.email}</span>
+            <span className="text-sm text-gray-600 truncate">{profile?.username || user.email}</span>
             <button onClick={signOut} className="text-gray-400 hover:text-gray-600" title="Sair">
               <LogOut size={18} />
             </button>

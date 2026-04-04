@@ -28,10 +28,9 @@ export default function RegisterPage() {
     if (signUpError) {
       setError(signUpError.message);
     } else if (data?.user?.id) {
-      await supabase.from('profiles').insert({
+      await supabase.from('profiles').upsert({
         id: data.user.id,
-        email,
-        name,
+        username: name,
       });
       router.push('/objectives');
     }

@@ -6,14 +6,14 @@ import { useState } from 'react';
 
 interface ObjectiveCardProps {
   objective: Objective;
-  onToggleStep?: (stepId: string, isCompleted: boolean) => void;
+  onToggleStep?: (stepId: string, completed: boolean) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
 }
 
 export default function ObjectiveCard({ objective, onToggleStep, onEdit, onDelete }: ObjectiveCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const completedSteps = objective.steps?.filter(s => s.is_completed).length || 0;
+  const completedSteps = objective.steps?.filter(s => s.completed).length || 0;
   const totalSteps = objective.steps?.length || 0;
   const progress = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
 
@@ -23,19 +23,18 @@ export default function ObjectiveCard({ objective, onToggleStep, onEdit, onDelet
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             {objective.theme && (
-              <span
-                className="inline-block w-3 h-3 rounded-full"
-                style={{ backgroundColor: objective.theme.color }}
-              />
+              <span className="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full">
+                {objective.theme.name}
+              </span>
             )}
             <h3 className="font-semibold text-lg text-gray-900">{objective.title}</h3>
           </div>
           {objective.description && (
             <p className="text-gray-500 text-sm mt-1">{objective.description}</p>
           )}
-          {objective.pillar && (
+          {objective.pillar_type?.pillar && (
             <span className="inline-block mt-2 px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded-full">
-              {objective.pillar.name}
+              {objective.pillar_type.pillar.name}
             </span>
           )}
         </div>
@@ -69,16 +68,16 @@ export default function ObjectiveCard({ objective, onToggleStep, onEdit, onDelet
               {objective.steps?.map(step => (
                 <li key={step.id} className="flex items-center gap-2">
                   <button
-                    onClick={() => onToggleStep?.(step.id, !step.is_completed)}
+                    onClick={() => onToggleStep?.(step.id, !step.completed)}
                     className="flex-shrink-0"
                   >
-                    {step.is_completed ? (
+                    {step.completed ? (
                       <CheckCircle2 size={18} className="text-purple-600" />
                     ) : (
                       <Circle size={18} className="text-gray-300" />
                     )}
                   </button>
-                  <span className={`text-sm ${step.is_completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>
+                  <span className={`text-sm ${step.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>
                     {step.title}
                   </span>
                 </li>

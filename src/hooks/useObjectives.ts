@@ -11,28 +11,32 @@ export function useObjectives() {
 
   const fetchObjectives = useCallback(async () => {
     setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('objectives')
+        .select(`
+          *,
+          steps:objective_steps(*),
+          pillar_type:pillar_types(*, pillar:pillars(*)),
+          theme:themes(*)
+        `)
+        .eq('user_id', session.user.id)
+        .is('group_id', null)
+        .order('created_at', { ascending: false });
+
+      if (!error && data) {
+        setObjectives(data as unknown as Objective[]);
+      }
+    } catch (err) {
+      console.error('Error fetching objectives:', err);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const { data, error } = await supabase
-      .from('objectives')
-      .select(`
-        *,
-        steps:objective_steps(*),
-        pillar_type:pillar_types(*, pillar:pillars(*)),
-        theme:themes(*)
-      `)
-      .eq('user_id', user.id)
-      .is('group_id', null)
-      .order('created_at', { ascending: false });
-
-    if (!error && data) {
-      setObjectives(data as unknown as Objective[]);
-    }
-    setLoading(false);
   }, [supabase]);
 
   useEffect(() => {
@@ -40,12 +44,12 @@ export function useObjectives() {
   }, [fetchObjectives]);
 
   const createObjective = async (objective: Partial<Objective>) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { data: null, error: new Error('Not authenticated') };
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return { data: null, error: new Error('Not authenticated') };
 
     const { data, error } = await supabase
       .from('objectives')
-      .insert({ ...objective, user_id: user.id })
+      .insert({ ...objective, user_id: session.user.id })
       .select()
       .single();
     if (!error) {
@@ -141,26 +145,31 @@ export function usePillarsAndThemes() {
 
   useEffect(() => {
     const fetch = async () => {
-      const [pillarsRes, themesRes, typesRes] = await Promise.all([
-        supabase.from('pillars').select('*'),
-        supabase.from('themes').select('*'),
-        supabase.from('pillar_types').select(`
-          *,
-          pillar:pillars(*),
-          themes:pillar_type_themes(theme:themes(*))
-        `),
-      ]);
+      try {
+        const [pillarsRes, themesRes, typesRes] = await Promise.all([
+          supabase.from('pillars').select('*'),
+          supabase.from('themes').select('*'),
+          supabase.from('pillar_types').select(`
+            *,
+            pillar:pillars(*),
+            themes:pillar_type_themes(theme:themes(*))
+          `),
+        ]);
 
-      if (pillarsRes.data) setPillars(pillarsRes.data);
-      if (themesRes.data) setThemes(themesRes.data);
-      if (typesRes.data) {
-        const parsed = typesRes.data.map((s: any) => ({
-          ...s,
-          themes: s.themes?.map((t: any) => t.theme).filter(Boolean) || [],
-        }));
-        setSubtypes(parsed);
+        if (pillarsRes.data) setPillars(pillarsRes.data);
+        if (themesRes.data) setThemes(themesRes.data);
+        if (typesRes.data) {
+          const parsed = typesRes.data.map((s: any) => ({
+            ...s,
+            themes: s.themes?.map((t: any) => t.theme).filter(Boolean) || [],
+          }));
+          setSubtypes(parsed);
+        }
+      } catch (err) {
+        console.error('Error fetching pillars and themes:', err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetch();
   }, [supabase]);
@@ -175,32 +184,36 @@ export function useGroups() {
 
   const fetchGroups = useCallback(async () => {
     setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        return;
+      }
+
+      const { data: memberships } = await supabase
+        .from('group_members')
+        .select('group_id')
+        .eq('user_id', session.user.id);
+
+      if (memberships && memberships.length > 0) {
+        const groupIds = memberships.map(m => m.group_id);
+        const { data } = await supabase
+          .from('groups')
+          .select(`
+            *,
+            owner:profiles!created_by(*),
+            members:group_members(*, profile:profiles(*))
+          `)
+          .in('id', groupIds);
+        setGroups(data || []);
+      } else {
+        setGroups([]);
+      }
+    } catch (err) {
+      console.error('Error fetching groups:', err);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const { data: memberships } = await supabase
-      .from('group_members')
-      .select('group_id')
-      .eq('user_id', user.id);
-
-    if (memberships && memberships.length > 0) {
-      const groupIds = memberships.map(m => m.group_id);
-      const { data } = await supabase
-        .from('groups')
-        .select(`
-          *,
-          owner:profiles!created_by(*),
-          members:group_members(*, profile:profiles(*))
-        `)
-        .in('id', groupIds);
-      setGroups(data || []);
-    } else {
-      setGroups([]);
-    }
-    setLoading(false);
   }, [supabase]);
 
   useEffect(() => {
@@ -208,8 +221,8 @@ export function useGroups() {
   }, [fetchGroups]);
 
   const createGroup = async (group: { name: string; description?: string }) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { data: null, error: new Error('Not authenticated') };
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return { data: null, error: new Error('Not authenticated') };
 
     const { data, error } = await supabase
       .rpc('create_group_with_owner', {
@@ -225,10 +238,9 @@ export function useGroups() {
   };
 
   const joinGroup = async (inviteCode: string) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { data: null, error: new Error('Not authenticated') };
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return { data: null, error: new Error('Not authenticated') };
 
-    // Find the group by invite code
     const { data: group, error: findError } = await supabase
       .from('groups')
       .select('id')
@@ -239,24 +251,22 @@ export function useGroups() {
       return { data: null, error: findError || new Error('Grupo não encontrado') };
     }
 
-    // Check if already a member
     const { data: existing } = await supabase
       .from('group_members')
       .select('id')
       .eq('group_id', group.id)
-      .eq('user_id', user.id)
+      .eq('user_id', session.user.id)
       .single();
 
     if (existing) {
       return { data: null, error: new Error('Você já faz parte deste grupo') };
     }
 
-    // Join the group
     const { data, error } = await supabase
       .from('group_members')
       .insert({
         group_id: group.id,
-        user_id: user.id,
+        user_id: session.user.id,
         role: 'member',
       })
       .select()

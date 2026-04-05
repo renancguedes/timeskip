@@ -8,9 +8,10 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: ReactNode;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,17 +24,23 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
 
   if (!isOpen) return null;
 
+  const sizeClasses = {
+    sm: 'max-w-md',
+    md: 'max-w-lg',
+    lg: 'max-w-2xl',
+  };
+
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in"
       onClick={(e) => e.target === overlayRef.current && onClose()}
     >
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+      <div className={`bg-surface-card border border-surface-lighter rounded-xl shadow-2xl w-full ${sizeClasses[size]} mx-4 max-h-[90vh] overflow-y-auto animate-slide-up`}>
         {title && (
-          <div className="flex items-center justify-between p-6 border-b">
-            <h2 className="text-xl font-semibold">{title}</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <div className="flex items-center justify-between p-6 border-b border-surface-lighter">
+            <h2 className="text-xl font-semibold text-gray-100">{title}</h2>
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-300 transition-colors">
               <X size={20} />
             </button>
           </div>

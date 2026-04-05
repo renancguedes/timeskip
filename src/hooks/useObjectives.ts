@@ -26,6 +26,7 @@ export function useObjectives() {
         theme:themes(*)
       `)
       .eq('user_id', user.id)
+      .is('group_id', null)
       .order('created_at', { ascending: false });
 
     if (!error && data) {

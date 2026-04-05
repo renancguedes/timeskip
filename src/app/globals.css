@@ -1,3 +1,88 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-primary: #0f1021;
+  --bg-secondary: #1a1b2e;
+  --bg-card: #1e2035;
+  --bg-hover: #242640;
+  --text-primary: #e8e9f3;
+  --text-secondary: #9ca3af;
+  --border-color: #2d2f4a;
+  --accent-purple: #8b5cf6;
+  --accent-blue: #6366f1;
+  --accent-green: #10b981;
+  --accent-amber: #f59e0b;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: #3d3f5a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4d4f6a;
+}
+
+/* Glow effects */
+.glow-purple {
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.15), 0 0 3px rgba(139, 92, 246, 0.1);
+}
+.glow-green {
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.15), 0 0 3px rgba(16, 185, 129, 0.1);
+}
+.glow-blue {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.15), 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(139, 92, 246, 0.1);
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.5s ease;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa);
+}
+
+/* Badge styles */
+.badge-stability {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+.badge-growth {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.badge-theme {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.badge-type {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}

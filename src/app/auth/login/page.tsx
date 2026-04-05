@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Zap } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,33 +31,38 @@ export default function LoginPage() {
     setLoading(false);
   };
 
+  const inputClasses = "w-full bg-surface-lighter border border-surface-lighter rounded-lg px-3 py-2.5 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all";
+
   return (
-    <main className="flex items-center justify-center h-screen bg-gray-50">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-2">TimeSkip</h1>
+    <main className="flex items-center justify-center h-screen bg-surface">
+      <div className="bg-surface-card border border-surface-lighter p-8 rounded-xl shadow-2xl w-full max-w-md">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Zap size={28} className="text-violet-500" />
+          <h1 className="text-2xl font-bold font-display bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">TimeSkip</h1>
+        </div>
         <p className="text-gray-500 text-center mb-6">Entre na sua conta</p>
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4">{error}</div>
+          <div className="bg-red-500/10 text-red-400 p-3 rounded-lg text-sm mb-4 border border-red-500/20">{error}</div>
         )}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">E-mail</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className={inputClasses}
               placeholder="voce@exemplo.com"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">Senha</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className={inputClasses}
               placeholder="Sua senha"
               required
             />
@@ -67,7 +73,7 @@ export default function LoginPage() {
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
           Ainda não tem uma conta?{' '}
-          <Link href="/auth/register" className="text-purple-600 hover:underline">Cadastre-se</Link>
+          <Link href="/auth/register" className="text-violet-400 hover:text-violet-300 transition-colors">Cadastre-se</Link>
         </p>
       </div>
     </main>

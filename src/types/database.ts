@@ -44,6 +44,8 @@ export interface Objective {
   pillar_id?: string;
   pillar_type_id?: string;
   theme_id?: string;
+  group_id?: string;
+  is_personal?: boolean;
   title: string;
   description?: string;
   status: 'pending' | 'active' | 'completed' | 'archived';

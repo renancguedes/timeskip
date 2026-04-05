@@ -15,7 +15,7 @@ const statusLabels: Record<string, string> = {
 };
 
 export default function ObjectivesPage() {
-  const { objectives, loading, createObjective, updateObjective, deleteObjective, toggleStep } = useObjectives();
+  const { objectives, loading, createObjective, updateObjective, deleteObjective, toggleStep, addStep, deleteStep } = useObjectives();
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [filter, setFilter] = useState('active');
@@ -23,10 +23,36 @@ export default function ObjectivesPage() {
   const filteredObjectives = objectives?.filter(o => o.status === filter) || [];
 
   const handleCreate = async (objectiveData: any) => {
+    const { steps, ...objData } = objectiveData;
     if (editingId) {
-      await updateObjective(editingId, objectiveData);
+      await updateObjective(editingId, objData);
+      // Handle steps for existing objective
+      if (steps) {
+        const existingSteps = objectives.find(o => o.id === editingId)?.steps || [];
+        const existingStepIds = existingSteps.map(s => s.id);
+        const newStepIds = steps.filter((s: any) => s.id).map((s: any) => s.id);
+
+        // Delete removed steps
+        for (const es of existingSteps) {
+          if (!newStepIds.includes(es.id)) {
+            await deleteStep(es.id);
+          }
+        }
+        // Add new steps
+        for (const step of steps) {
+          if (!step.id) {
+            await addStep(editingId, { title: step.title });
+          }
+        }
+      }
     } else {
-      await createObjective(objectiveData);
+      const result = await createObjective(objData);
+      // Add steps to newly created objective
+      if (result.data && steps?.length > 0) {
+        for (const step of steps) {
+          await addStep(result.data.id, { title: step.title });
+        }
+      }
     }
     setShowModal(false);
     setEditingId(null);
@@ -35,10 +61,10 @@ export default function ObjectivesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Objetivos</h1>
+        <h1 className="text-3xl font-bold font-display text-gray-100">Objetivos</h1>
         <button
-          className="inline-flex items-center bg-purple-600 text-white rounded-lg px-4 py-2 hover:bg-purple-700 transition-colors"
-          onClick={() => setShowModal(true)}
+          className="inline-flex items-center bg-violet-600 text-white rounded-lg px-4 py-2 hover:bg-violet-500 transition-all glow-purple font-medium text-sm"
+          onClick={() => { setEditingId(null); setShowModal(true); }}
         >
           <Plus size={16} className="mr-2" />
           Novo Objetivo
@@ -50,10 +76,10 @@ export default function ObjectivesPage() {
           <button
             key={status}
             onClick={() => setFilter(status)}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
               filter === status
-                ? 'bg-purple-100 text-purple-700'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
+                : 'bg-surface-lighter text-gray-500 hover:text-gray-300 border border-transparent'
             }`}
           >
             {statusLabels[status]}
@@ -68,7 +94,7 @@ export default function ObjectivesPage() {
           title="Nenhum objetivo ainda"
           description={`Você não tem nenhum objetivo ${statusLabels[filter].toLowerCase()}. Crie um para começar!`}
           icon={Target}
-          actionButton={{ label: 'Criar Objetivo', onClick: () => setShowModal(true) }}
+          actionButton={{ label: 'Criar Objetivo', onClick: () => { setEditingId(null); setShowModal(true); } }}
         />
       ) : (
         <div className="grid gap-4">
@@ -82,12 +108,14 @@ export default function ObjectivesPage() {
                 setShowModal(true);
               }}
               onDelete={deleteObjective}
+              onAddStep={addStep}
+              onDeleteStep={deleteStep}
             />
           ))}
         </div>
       )}
 
-      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setEditingId(null); }} title={editingId ? 'Editar Objetivo' : 'Novo Objetivo'}>
+      <Modal isOpen={showModal} onClose={() => { setShowModal(false); setEditingId(null); }} title={editingId ? 'Editar Objetivo' : 'Novo Objetivo'} size="lg">
         <ObjectiveForm
           initialData={editingId ? objectives.find(o => o.id === editingId) : undefined}
           onSubmit={handleCreate}

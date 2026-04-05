@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Fira_Sans } from 'next/font/google';
+import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -7,16 +7,20 @@ export const metadata: Metadata = {
   description: 'Acompanhe seus objetivos e metas com o TimeSkip',
 };
 
-const fonts = Fira_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display',
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={fonts.variable}>
-      <body>
+    <html lang="pt-BR" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+      <body className="bg-surface text-gray-100 font-sans">
         {children}
       </body>
     </html>

@@ -13,19 +13,19 @@ export default function ShareCard({ group }: ShareCardProps) {
 
   return (
     <Link href={`/groups/${group.id}`}>
-      <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">{group.name}</h3>
+      <div className="bg-surface-card rounded-xl border border-surface-lighter p-5 card-hover cursor-pointer">
+        <h3 className="text-lg font-semibold text-gray-100 mb-2">{group.name}</h3>
         {group.description && (
           <p className="text-sm text-gray-500 mb-3">{group.description}</p>
         )}
         <div className="flex items-center gap-4 text-sm text-gray-500">
           <span className="flex items-center gap-1">
-            <Users size={14} />
+            <Users size={14} className="text-violet-400" />
             {memberCount} {memberCount === 1 ? 'membro' : 'membros'}
           </span>
           {group.owner && (
             <span className="flex items-center gap-1">
-              <Crown size={14} />
+              <Crown size={14} className="text-amber-400" />
               {group.owner.username}
             </span>
           )}

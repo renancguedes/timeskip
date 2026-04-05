@@ -211,17 +211,12 @@ export function useGroups() {
     if (!user) return { data: null, error: new Error('Not authenticated') };
 
     const { data, error } = await supabase
-      .from('groups')
-      .insert({ ...group, created_by: user.id })
-      .select()
-      .single();
-
-    if (data && !error) {
-      await supabase.from('group_members').insert({
-        group_id: data.id,
-        user_id: user.id,
-        role: 'owner',
+      .rpc('create_group_with_owner', {
+        p_name: group.name,
+        p_description: group.description || null,
       });
+
+    if (!error) {
       await fetchGroups();
     }
 

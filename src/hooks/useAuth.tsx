@@ -25,34 +25,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = useMemo(() => createClient(), []);
+  const supabase = createClient();
 
   const fetchProfile = useCallback(async (userId: string) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    setProfile(data);
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      setProfile(data);
+    } catch (err) {
+      console.error('Error fetching profile:', err);
+    }
   }, [supabase]);
 
-  const refreshProfile = useCallback(async () => {
-    if (user) {
-      await fetchProfile(user.id);
-    }
-  }, [user, fetchProfile]);
-
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      if (user) {
-        await fetchProfile(user.id);
+    const initAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          await fetchProfile(session.user.id);
+        }
+      } catch (err) {
+        console.error('Error initializing auth:', err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    getUser();
+    initAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -69,17 +72,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, [supabase, fetchProfile]);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     await supabase.auth.signOut();
-    setUser(null);
-    setProfile(null);
-  };
+  }, [supabase]);
+
+  const refreshProfile = useCallback(async () => {
+    if (user) {
+      await fetchProfile(user.id);
+    }
+  }, [user, fetchProfile]);
+
+  const value = useMemo(() => ({
+    user,
+    profile,
+    loading,
+    signOut,
+    refreshProfile,
+  }), [user, profile, loading, signOut, refreshProfile]);
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signOut, refreshProfile }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}
